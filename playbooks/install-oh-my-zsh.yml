@@ -1,0 +1,6 @@
+---
+- name: Setup oh my zsh
+  hosts:
+     - localhost
+  roles:
+    - roles/zsh

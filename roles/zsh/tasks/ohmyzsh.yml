@@ -1,0 +1,31 @@
+---
+
+- name: Clone oh-my-zsh source
+  git:
+    repo: https://github.com/ohmyzsh/ohmyzsh.git
+    dest: "{{ om_zsh_path }}"
+
+
+- name: Config zshrc file
+  template:
+    src: "zshrc.j2"
+    dest: "{{ zshrc_path }}"
+
+
+- name: Clone auto suggestion plugin
+  git:
+    repo: https://github.com/zsh-users/zsh-autosuggestions
+    dest: "{{ om_zsh_path }}/custom/plugins/zsh-autosuggestions"
+
+
+- name: Clone syntax highlight plugin
+  git:
+    repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
+    dest: "{{ om_zsh_path }}/custom/plugins/zsh-syntax-highlighting"
+
+
+- name: Set zsh as default shell
+  become: yes
+  user:
+    name: "{{ ansible_user }}" 
+    shell: /usr/bin/zsh

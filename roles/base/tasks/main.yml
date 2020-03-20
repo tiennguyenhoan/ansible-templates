@@ -1,0 +1,27 @@
+# ---
+
+# #- include: sudoPermission.yml
+
+# - include: basePackage.yml
+---
+
+- name: Update apt
+  become: true
+  apt: update_cache=yes
+
+- name: Install base packages
+  become: true
+  apt:
+    name:
+      - 'git'
+      - 'unzip'
+      - 'tar'
+      - 'sed'
+      - 'curl'
+      - 'vim'
+      - 'wget'
+      - 'cron'
+      - 'htop'
+      - 'lsb-release'
+      - 'jq'
+    state: present

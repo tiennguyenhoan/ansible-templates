@@ -1,2 +1,9 @@
-# ansible-template
-Project for storing all script to setup new tools/configuration
+# Tools with ansible
+
+## Requirement
+
+## Usage
+
+```
+    ansible-playbook playbooks/install-oh-my-zsh.yml -i inv.ini
+```

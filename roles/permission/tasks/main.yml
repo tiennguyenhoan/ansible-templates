@@ -1,0 +1,42 @@
+---
+
+- name: Update apt
+  apt: update_cache=yes
+
+- name: Ensure sudo is installed
+  apt:
+    pkg: sudo
+    state: latest
+   
+- name: Add user to admin group
+  user:
+    name: "{{ user }}"
+    append: yes
+    groups: adm
+    createhome: no
+    state: present
+
+- name: Add user to root group
+  user:
+    name: "{{ user }}"
+    append: yes
+    groups: root
+    createhome: no
+    state: present
+
+- name: Add user to sudo group
+  user:
+    name: "{{ user }}"
+    append: yes
+    groups: sudo
+    createhome: no
+    state: present
+
+- name: Make user sudo with no-password
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: "^{{user}} ALL="
+    line: "{{user}} ALL=(ALL) NOPASSWD:ALL"
+    validate: 'visudo -cf %s'
+    create: True

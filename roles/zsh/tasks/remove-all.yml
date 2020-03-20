@@ -1,0 +1,23 @@
+---
+
+- name: Remove zsh
+  become: true
+  apt:
+    pkg: zsh
+    state: absent
+
+- name: Remove oh my zsh folder
+  file: 
+    path: "~/.oh-my-zsh"
+    state: absent
+
+- name: Remove zshrc file
+  file: 
+    path: "~/.zshrc"
+    state: absent
+
+- name: Set bash as default shell
+  become: yes
+  user: 
+    name: "{{ ansible_user }}" 
+    shell: /usr/bin/bash
