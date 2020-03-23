@@ -7,9 +7,15 @@
 
 
 - name: Config zshrc file
-  template:
-    src: "zshrc.j2"
+  copy:
+    src: "files/zshrc.yml"
     dest: "{{ zshrc_path }}"
+
+
+- name: Config p10k.zsh file
+  copy:
+    src: "files/p10k.zsh.yml"
+    dest: "{{ p10k_path }}"
 
 
 - name: Clone auto suggestion plugin
@@ -22,6 +28,13 @@
   git:
     repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
     dest: "{{ om_zsh_path }}/custom/plugins/zsh-syntax-highlighting"
+
+
+- name: Clone powerlevel10k theme
+  git:
+    repo: https://github.com/romkatv/powerlevel10k.git
+    depth: 1
+    dest: "{{ om_zsh_path }}/custom/themes/powerlevel10k"
 
 
 - name: Set zsh as default shell

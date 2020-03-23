@@ -1,8 +1,10 @@
 ---
 
 # For testing purpose
-# - include: remove-all.yml
+# - include: remove.yml
 
 - include: zsh.yml
 
 - include: ohmyzsh.yml
+
+- include: font.yml

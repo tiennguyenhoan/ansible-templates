@@ -16,6 +16,14 @@
     path: "~/.zshrc"
     state: absent
 
+- name: Remove font folder
+  file: 
+    path: "~/.local/share/fonts"
+    state: absent
+
+- name: Clear and regenereate font cache
+  command: fc-cache -f -v
+
 - name: Set bash as default shell
   become: yes
   user: 
