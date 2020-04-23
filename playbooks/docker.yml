@@ -3,7 +3,7 @@
 
   hosts: "{{ hosts | default('local') }}"
   
-  become: true
+  become: yes
 
   roles:
     - roles/docker

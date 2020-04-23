@@ -1,8 +1,8 @@
 ---
 
-- include: setup-docker.yml
+- include: docker.yml
 
-- include_tasks: setup-docker-compose.yml
+- include_tasks: docker-compose.yml
   when: docker_install_compose | bool
 
-- include: setup-docker-user.yml
+- include: docker-user.yml

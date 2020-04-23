@@ -1,0 +1,20 @@
+---
+
+- name: Download Gradle {{ gradle_version }}
+  get_url: 
+    url: https://services.gradle.org/distributions/{{ gradle_zipfile }}
+    dest: "/tmp"
+
+
+- name: Extract Gradle
+  unarchive:
+    src: "/tmp/{{ gradle_zipfile }}"
+    dest: "/usr/local/share/"
+    creates: "/usr/local/share/{{ gradle_folder }}"
+    remote_src: True 
+
+- name: Add Gradle executable symlink to path
+  file:
+    src: "/usr/local/share/{{ gradle_folder }}/bin/gradle"
+    dest: "/usr/local/bin/gradle"
+    state: link

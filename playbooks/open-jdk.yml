@@ -1,0 +1,9 @@
+---
+- name: Setup opendjk 
+
+  hosts: "{{ hosts | default('local') }}"
+
+  become: yes
+  
+  roles:
+    - roles/openjdk

@@ -1,8 +1,4 @@
 ---
-- name: Update apt
-  become: true
-  apt: update_cache=yes
-
 - name: Install base packages
   become: true
   apt:
@@ -20,3 +16,4 @@
       - 'jq'
       - 'make'
     state: present
+    update_cache: yes
