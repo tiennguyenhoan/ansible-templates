@@ -1,5 +1,5 @@
 ---
 
-om_zsh_path: "~/.oh-my-zsh"
+oh_zsh_path: "~/.oh-my-zsh"
 zshrc_path: "~/.zshrc"
 p10k_path: "~/.p10k.zsh"

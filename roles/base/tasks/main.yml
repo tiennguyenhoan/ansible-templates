@@ -1,10 +1,4 @@
-# ---
-
-# #- include: sudoPermission.yml
-
-# - include: basePackage.yml
 ---
-
 - name: Update apt
   become: true
   apt: update_cache=yes
@@ -24,4 +18,5 @@
       - 'htop'
       - 'lsb-release'
       - 'jq'
+      - 'make'
     state: present

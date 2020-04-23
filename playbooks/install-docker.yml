@@ -1,0 +1,9 @@
+---
+- name: Setup Docker and Docker compose 
+
+  hosts: "{{ hosts | default('local') }}"
+  
+  become: true
+
+  roles:
+    - roles/docker
