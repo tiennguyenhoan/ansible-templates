@@ -1,0 +1,6 @@
+---
+- name: Install Docker 
+  hosts: "{{ hosts | default('local') }}"
+  become: yes
+  roles:
+    - roles/docker

@@ -1,9 +1,0 @@
----
-- name: Setup gradle 
-
-  hosts: "{{ hosts | default('local') }}"
-
-  become: yes
-  
-  roles:
-    - roles/gradle

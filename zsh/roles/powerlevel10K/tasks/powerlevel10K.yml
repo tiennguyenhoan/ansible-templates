@@ -1,0 +1,15 @@
+---
+- name: Clone powerlevel10k theme
+  git:
+    repo: https://github.com/romkatv/powerlevel10k.git
+    depth: 1
+    dest: "{{ oh_zsh_path }}/custom/themes/powerlevel10k"
+
+
+- name: Update zshrc theme
+  lineinfile:
+    path: "{{ zshrc_path }}"
+    regexp: '^ZSH_THEME=.*'
+    line: 'ZSH_THEME="{{ zshTheme }}"'
+
+

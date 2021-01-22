@@ -1,7 +1,0 @@
----
-- name: Setup oh my zsh
-
-  hosts: "{{ hosts | default('local') }}"
-
-  roles:
-    - roles/zsh

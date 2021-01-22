@@ -1,0 +1,17 @@
+---
+- name: Remove old Zsh
+  apt:
+    name: zsh
+    state: absent
+
+- name: Remove zshrc file
+  file: 
+    path: "{{ zshrc_path }}"
+    state: absent
+
+- name: Install zsh
+  apt:
+    name: zsh
+    state: latest
+    update_cache: yes
+

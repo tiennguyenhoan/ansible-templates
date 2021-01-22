@@ -1,0 +1,40 @@
+---
+- name: Check gradle parent folder 
+  stat: 
+    path: "{{ gradle_location }}"
+  register: gradle_location
+
+
+- name: Create gradle folder when not exist
+  file:
+    path: "{{ gradle_location }}"
+    state: "directory"
+  when: not gradle_location.stat.exists
+
+
+- name: Download Gradle {{ gradle_version }}
+  get_url: 
+    url: "https://services.gradle.org/distributions/{{ gradle_zipfile }}"
+    dest: "/tmp"
+
+
+- name: Extract Gradle
+  unarchive:
+    src: "/tmp/{{ gradle_zipfile }}"
+    dest: "{{ gradle_location }}/{{ gradle_folder }}"
+    creates: "{{ gradle_location }}/{{ gradle_folder }}"
+    remote_src: True 
+
+
+- name: Remove downloaded gradle file
+  file:
+    path: "/tmp/{{ gradle_zipfile }}"
+    state: absent 
+
+
+- name: Add Gradle executable symlink to path (Single gradle only)
+  file:
+    src: "{{ gradle_location }}/{{ gradle_folder }}/bin/gradle"
+    dest: "{{ gradle_symlink_path }}/{{ command_prefix }}"
+    state: link
+

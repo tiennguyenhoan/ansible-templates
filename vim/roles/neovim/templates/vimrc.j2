@@ -1,0 +1,326 @@
+" Instruction
+"    - After finished, save the file and execute command below to apply the
+"    change
+"          
+"           :so %
+"
+"    - To install Plugin:
+"    
+"           :PlugInstall
+"
+"    - To get plugin status
+"
+"           :PlugStatus
+"
+"''''''''''''''''''''''''''''''
+
+" Show line number 
+set nu
+
+set encoding=UTF-8
+
+" Some servers have issues with backup files, see #649.
+set nobackup
+set nowritebackup
+
+" Give more space for displaying messages.
+set cmdheight=2
+
+set autoread
+set autowrite
+
+set autoindent
+set si "smart indent
+
+" show existing tab with 2 spaces width
+set tabstop=2
+" when indenting with '>', use 2 spaces width
+set shiftwidth=2
+" Fine tunes the amount of white space to be added
+set softtabstop=2
+" On pressing tab, insert 4 spaces
+set expandtab
+
+syntax on
+
+if has('mouse')
+  set mouse=a
+endif
+
+filetype plugin on
+
+" Mapping key
+map <C-n> :NERDTreeToggle<CR>
+
+map <C-Up> :tabnew "
+map <C-Left> :tabprevious<CR>
+map <C-Right> :tabnext<CR>
+
+map <C-k> :TagbarToggle<CR>
+
+" Open Terminal
+map <Leader>at :call FloatTerm()<CR>
+
+map <Leader>sv :vertical resize 
+map <Leader>s :resize 
+
+"''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+" Floating Term
+let s:float_term_border_win = 0
+let s:float_term_win = 0
+function! FloatTerm(...)
+  " Configuration
+  let height = float2nr((&lines - 2) * 0.8)
+  let row = float2nr((&lines - height) / 2)
+  let width = float2nr(&columns * 0.8)
+  let col = float2nr((&columns - width) / 2)
+  " Border Window
+  let border_opts = {
+        \ 'relative': 'editor',
+        \ 'row': row - 1,
+        \ 'col': col - 2,
+        \ 'width': width + 4,
+        \ 'height': height + 2,
+        \ 'style': 'minimal'
+        \ }
+  " Terminal Window
+  let opts = {
+        \ 'relative': 'editor',
+        \ 'row': row,
+        \ 'col': col,
+        \ 'width': width,
+        \ 'height': height,
+        \ 'style': 'minimal'
+        \ }
+  let top = "╭" . repeat("─", width + 2) . "╮"
+  let mid = "│" . repeat(" ", width + 2) . "│"
+  let bot = "╰" . repeat("─", width + 2) . "╯"
+  let lines = [top] + repeat([mid], height) + [bot]
+  let bbuf = nvim_create_buf(v:false, v:true)
+  call nvim_buf_set_lines(bbuf, 0, -1, v:true, lines)
+  let s:float_term_border_win = nvim_open_win(bbuf, v:true, border_opts)
+  let buf = nvim_create_buf(v:false, v:true)
+  let s:float_term_win = nvim_open_win(buf, v:true, opts)
+  " Styling
+  hi FloatWinBorder guifg=#87bb7c
+  call setwinvar(s:float_term_border_win, '&winhl', 'Normal:FloatWinBorder')
+  call setwinvar(s:float_term_win, '&winhl', 'Normal:Normal')
+  if a:0 == 0
+    terminal
+  else
+    call termopen(a:1)
+  endif
+  startinsert
+  " Close border window when terminal window close
+  autocmd TermClose * ++once :bd! | call nvim_win_close(s:float_term_border_win, v:true)
+endfunction
+
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+let g:coc_snippet_next = '<tab>'
+
+
+"''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+" Initial Plugin session 
+"''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+call plug#begin('~/.vim/plugged')
+
+" Vim icon
+Plug 'ryanoasis/vim-devicons'
+
+" Left Toc bar
+" https://github.com/preservim/nerdtree
+Plug 'preservim/nerdtree'
+let NERDTreeMinimalUI=1
+let NERDTreeWinSize=35
+let NERDTreeShowHidden=1
+let NERDTreeIgnore = ['\.git$', '\.DS_Store$']
+
+" Auto open nerdtree
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
+
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+let g:NERDTreeFileExtensionHighlightFullName = 1
+let g:NERDTreeExactMatchHighlightFullName = 1
+let g:NERDTreePatternMatchHighlightFullName = 1
+let g:WebDevIconsDisableDefaultFolderSymbolColorFromNERDTreeDir = 1
+let g:WebDevIconsDisableDefaultFileSymbolColorFromNERDTreeFile = 1
+
+let g:NERDTreeHighlightFolders = 1 " enables folder icon highlighting using exact match
+let g:NERDTreeHighlightFoldersFullName = 1 " highlights the folder name
+
+" you can add these colors to your .vimrc to help customizing
+let s:brown = "9e5a36"
+let s:aqua =  "3AFFDB"
+let s:blue = "689FB6"
+let s:darkBlue = "44788E"
+let s:purple = "834F79"
+let s:lightPurple = "834F79"
+let s:red = "F03737"
+let s:beige = "F5C06F"
+let s:yellow = "F09F17"
+let s:orange = "D4843E"
+let s:darkOrange = "F16529"
+let s:pink = "CB6F6F"
+let s:salmon = "EE6E73"
+let s:green = "8FAA54"
+let s:lightGreen = "b3ffbd"
+let s:zip_red = "e35d5d"
+let s:green = "31B53E"
+let s:white = "FFFFFF"
+let s:git_orange = 'F54D27'
+let s:git_dark_gray = '616161'
+
+let g:NERDTreeExtensionHighlightColor = {} " this line is needed to avoid error
+let g:NERDTreeExtensionHighlightColor['yml'] = s:brown
+
+let g:NERDTreePatternMatchHighlightColor = {} " this line is needed to avoid error
+let g:NERDTreePatternMatchHighlightColor['.*\.zip$'] = s:zip_red
+let g:NERDTreePatternMatchHighlightColor['.*\.gradle$'] = s:darkBlue 
+let g:NERDTreePatternMatchHighlightColor['.*\.j2$'] = s:lightGreen
+let g:NERDTreePatternMatchHighlightColor['.*\.sh$'] = s:salmon
+
+let g:NERDTreeExactMatchHighlightColor = {} " this line is needed to avoid error
+let g:NERDTreeExactMatchHighlightColor['dockerfile'] = s:blue
+let g:NERDTreeExactMatchHighlightColor['.gitignore'] = s:git_dark_gray
+
+
+" Enable When getting lag
+" let g:NERDTreeLimitedSyntax = 1
+"
+" If still lagging, trying to enable these 
+" let g:NERDTreeSyntaxDisableDef" aultExtensions = 1
+" let g:NERDTreeSyntaxDisableDefaultExactMatches = 1
+" let g:NERDTreeSyntaxDisableDefaultPatternMatches = 1
+" let g:NERDTreeSyntaxEnabledExtensions = ['c', 'h', 'c++', 'cpp', 'php', 'rb', 'js', 'css', 'html'] " enabled extensions with default colors
+" let g:NERDTreeSyntaxEnabledExactMatches = ['node_modules', 'favicon.ico'] " enabled exact matches with default colors
+
+
+" Find files/folder simple way
+Plug 'kien/ctrlp.vim'
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_show_hidden = 1
+
+" Auto pair Bracket
+Plug 'jiangmiao/auto-pairs'
+
+" Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
+Plug 'junegunn/vim-easy-align'
+
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" Git commands
+Plug 'tpope/vim-fugitive'
+
+" Fold code
+"  - zc : Collase 
+"  - zo : Expand
+Plug 'tmhedberg/SimpylFold'
+
+" https://github.com/vim-airline/vim-airline
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline#extensions#tabline#formatter = 'default'
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+
+" unicode symbols
+let g:airline_left_sep = '»'
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+let g:airline_symbols.linenr = '␊'
+let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.paste = 'Þ'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.whitespace = 'Ξ'
+
+
+" Comment tool
+" Usage: 
+"    - To comment   : \ c c 
+"    - To un-comment: \ c u
+"
+"''''''''''''''''''''''''''''''''''''''
+Plug 'preservim/nerdcommenter'
+
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+
+" Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDDefaultAlign = 'left'
+
+" Set a language to use its alternate delimiters by default
+let g:NERDAltDelims_java = 1
+
+" Add your own custom formats or override the defaults
+let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
+
+" Enable NERDCommenterToggle to check all selected lines is commented or not 
+let g:NERDToggleCheckAllLines = 1
+
+
+
+" Tagbar
+" Install first: sudo apt install ctags
+"
+" https://github.com/preservim/tagbar/blob/master/doc/tagbar.txt
+" ''''''''''''''''''''''''''''''''''''''''
+Plug 'preservim/tagbar'
+
+" If you set this option the cursor will move to the Tagbar window when it is opened.
+let g:tagbar_autofocus = 1
+
+" Whether line numbers should be shown in the Tagbar window.
+let g:tagbar_show_linenumbers = 1
+
+
+
+
+" Vim auto complete
+" if has('nvim'" )
+"   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" else
+"   Plug 'Shougo/deoplete.nvim'
+"   Plug 'roxma/nvim-yarp'
+"   Plug 'roxma/vim-hug-neovim-rpc'
+" endif
+" let g:deoplete#enable_at_startup = 1
+
+call plug#end()

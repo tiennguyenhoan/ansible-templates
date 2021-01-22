@@ -1,0 +1,34 @@
+---
+- name: Remove oh my zsh folder
+  file: 
+    path: "{{ oh_zsh_path }}"
+    state: absent
+
+- name: Clone oh-my-zsh source
+  git:
+    repo: https://github.com/ohmyzsh/ohmyzsh.git
+    dest: "{{ oh_zsh_path }}"
+
+- name: Clone auto suggestion plugin
+  git:
+    repo: https://github.com/zsh-users/zsh-autosuggestions
+    dest: "{{ oh_zsh_path }}/custom/plugins/zsh-autosuggestions"
+
+- name: Clone syntax highlight plugin
+  git:
+    repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
+    dest: "{{ oh_zsh_path }}/custom/plugins/zsh-syntax-highlighting"
+
+
+- name: Config zshrc file
+  template:
+    src: "zshrc.j2"
+    dest: "{{ zshrc_path }}"
+    backup: yes
+    mode: 'u=rw,go=r'
+
+
+- name: Set zsh as default shell
+  user:
+    name: "{{ ansible_user }}" 
+    shell: /usr/bin/zsh

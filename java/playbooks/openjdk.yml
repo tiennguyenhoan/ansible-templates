@@ -1,0 +1,8 @@
+---
+- name: Install Openjdk
+  hosts: "{{ hosts | default('local') }}"
+  become: yes
+  vars:
+    java_packages: "openjdk-8-jdk"
+  roles:
+    - roles/openjdk

@@ -1,0 +1,33 @@
+---
+- name: Fetch Java version
+  command: java -version 2>&1 | grep version | awk '{print $3}' | sed 's/"//g'
+  changed_when: False
+  register: java_result
+  ignore_errors: True
+
+- name: Exit when java is not installed  
+  fail: 
+    msg: "Java is not installed."
+  when:  java_result is failed
+
+
+- name: Exit if input gradle version not valid
+  fail:
+    msg: "Please input gradle version to continue"
+  when: gradle_version is not defined
+
+- name: Exit if input command prefix for gradle version not valid
+  fail:
+    msg: "Please input command prefix to use"
+  when: command_prefix is not defined
+
+- name: Get current gradle version
+  stat:
+    path: "{{ gradle_location }}/{{ gradle_version }}"
+  register: gradle_ver_present
+
+- name: Exit when gradle version already installed
+  fail: 
+    msg: "Gradle version already installed."
+  when:  gradle_ver_present.stat.exists
+

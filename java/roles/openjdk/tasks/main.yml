@@ -1,0 +1,11 @@
+---
+- name: Add Openjdk repository
+  apt_repository:
+    repo: ppa:openjdk-r/ppa
+
+- name: Install lastest version of Openjdk
+  apt:
+    name: "{{ java_packages }}"    
+    state: latest
+    update_cache: yes
+

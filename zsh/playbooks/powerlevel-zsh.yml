@@ -1,0 +1,5 @@
+---
+- name: Setup powerlevel10K theme for zsh
+  hosts: "{{ hosts | default('local') }}"
+  roles:
+    - roles/powerlevel10K

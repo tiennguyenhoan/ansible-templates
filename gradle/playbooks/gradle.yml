@@ -1,0 +1,8 @@
+---
+- name: Install Gradle
+  hosts: "{{ hosts | default('local') }}"
+  vars:
+    gradle_version: "5.6.1"
+    command_prefix: "gradle5"
+  roles:
+    - roles/gradle

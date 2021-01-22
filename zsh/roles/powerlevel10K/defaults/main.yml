@@ -1,0 +1,6 @@
+---
+
+oh_zsh_path: "~/.oh-my-zsh"
+zshrc_path: "~/.zshrc"
+
+zshTheme: "powerlevel10k/powerlevel10k"

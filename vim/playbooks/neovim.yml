@@ -1,0 +1,5 @@
+---
+- name: Setup neovim
+  hosts: "{{ hosts | default('local') }}"
+  roles:
+    - roles/neovim
