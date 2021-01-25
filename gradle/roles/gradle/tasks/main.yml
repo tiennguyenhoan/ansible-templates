@@ -1,0 +1,6 @@
+---
+
+- include: post-install.yml
+
+- include: install-gradle.yml
+  become: yes

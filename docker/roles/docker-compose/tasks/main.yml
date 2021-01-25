@@ -1,0 +1,30 @@
+---
+- name: Install required system packages
+  apt:
+    name: curl
+    state: present
+    update_cache: yes
+
+
+- name: Check old docker-compose version installed in the machines
+  command: docker-compose --version
+  register: current_docker_compose 
+  changed_when: false
+  failed_when: false
+
+- name: Remove old docker-compose version if exist
+  file:
+    path: "{{ docker_compose_path }}"
+    state: absent
+  when: >
+    current_docker_compose.stdout is defined
+    and docker_compose_version not in current_docker_compose.stdout
+
+- name: Install Docker Compose (if configured).
+  get_url:
+    url: https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-Linux-x86_64
+    dest: "{{ docker_compose_path }}"
+    mode: 0755
+  when: >
+    current_docker_compose.stdout is defined
+    and docker_compose_version not in current_docker_compose.stdout

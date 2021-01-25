@@ -1,0 +1,20 @@
+---
+- name: Check zsh already installed
+  package_facts:
+    manager: auto
+  
+- name: Exit if zsh is not installed
+  fail:
+    msg: "Please install Zsh first"
+  when: "'zsh' not in ansible_facts.packages"
+
+
+- name: Check oh-my-zsh already installed
+  stat:
+    path: "{{ oh_zsh_path }}"
+  register: oh_zsh
+
+- name: Exit if oh my zsh is not installed
+  fail:
+    msg: "Please install Oh my zsh first"
+  when: not oh_zsh.stat.exists

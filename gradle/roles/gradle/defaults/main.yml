@@ -1,0 +1,8 @@
+---
+oracle_java_version: 8
+
+gradle_zipfile: "gradle-{{ gradle_version }}-bin.zip"
+gradle_folder:  "gradle-{{ gradle_version }}"
+
+gradle_localtion: "/opt/gradle"
+gradle_symlink_path: "/usr/local/bin"

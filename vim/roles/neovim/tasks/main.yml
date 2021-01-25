@@ -1,0 +1,56 @@
+---
+- name: Remove old neovim & vim packages
+  become: yes
+  apt:
+    name:
+      - neovim
+      - vim
+    state: absent
+
+- name: Add Docker APT repository
+  apt_repository:
+    repo: ppa:neovim-ppa/stable 
+
+- name: Install neovim packages
+  become: yes
+  apt:
+    name: 'neovim'
+    state: latest
+    update_cache: yes
+
+
+- name: Make autoload directory
+  file: 
+  path: "{{ vi_config_dir }}/autoload" 
+  state: directory
+
+
+- name: Create neovim config
+  file:
+    path: "{{ neovim_config_dir }}"
+    owner: root
+    group: root
+    mode: "+x"
+
+
+- name: Overide config vimrc file 
+  template:
+    src: "vimrc.j2"
+    dest: "{{ vimrc_path }}"
+
+
+- name: Create symlink for vim config
+  file:
+    src: "{{ vimrc_path }}"
+    dest: "{{ neovim_config_dir }}/init.vim"
+    state: link
+
+
+- name: Install vim-plug
+  get_url:
+    url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    dest: "{{ vi_config_dir }}/autoload/plug.vim"
+  force: yes
+
+  #-  name: Install vim plugins
+  # command: nvim "+silent! PlugInstall!" +qall!

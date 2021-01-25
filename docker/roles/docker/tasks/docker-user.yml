@@ -1,0 +1,12 @@
+---
+- name: Ensure docker user are added to the docker group.
+  user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: true
+
+
+- name: Allow docker command to be used by {{ ansible_user }}
+  file:
+    path: /var/run/docker.sock
+    mode: 0666

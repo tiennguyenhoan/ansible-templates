@@ -1,0 +1,6 @@
+---
+- include: verify.yml
+
+- include: powerlevel10K.yml
+
+- include: font.yml

@@ -1,0 +1,5 @@
+---
+vi_config_dir: "~/.vim"
+vimrc_path: "~/.vimrc"
+
+neovim_config_dir: "~/.config/nvim"

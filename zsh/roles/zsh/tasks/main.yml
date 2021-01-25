@@ -1,0 +1,5 @@
+---
+- include: zsh.yml
+  become: yes
+
+- include: ohmyzsh.yml
