@@ -3,13 +3,24 @@
   become: yes
   apt:
     name:
-      - neovim
       - vim
     state: absent
 
-- name: Add Docker APT repository
+
+- name: Install necessary tools
+  become: yes
+  apt:
+    name:
+      - software-properties-common
+    state: latest
+    update_cache: yes
+
+
+- name: Add neovim repository
+  become: yes
   apt_repository:
-    repo: ppa:neovim-ppa/stable 
+    repo: ppa:neovim-ppa/stable
+
 
 - name: Install neovim packages
   become: yes
@@ -19,21 +30,15 @@
     update_cache: yes
 
 
-- name: Make autoload directory
-  file: 
-  path: "{{ vi_config_dir }}/autoload" 
-  state: directory
-
-
+# Setup neovim for current user
 - name: Create neovim config
   file:
     path: "{{ neovim_config_dir }}"
-    owner: root
-    group: root
     mode: "+x"
+    state: directory
 
 
-- name: Overide config vimrc file 
+- name: Overide config vimrc file
   template:
     src: "vimrc.j2"
     dest: "{{ vimrc_path }}"
@@ -46,11 +51,65 @@
     state: link
 
 
+- name: Create vim-plug folder
+  file:
+    path: "{{ vim_plug_dir }}"
+    state: directory
+    mode: o+rw 
+    recurse: yes
+
+
 - name: Install vim-plug
   get_url:
     url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    dest: "{{ vi_config_dir }}/autoload/plug.vim"
-  force: yes
+    dest: "{{ vim_plug_dir }}/plug.vim"
+    force: yes
 
-  #-  name: Install vim plugins
-  # command: nvim "+silent! PlugInstall!" +qall!
+
+- name: Install vim plugins
+  shell: 'nvim "+silent! PlugInstall!" +qall!'
+
+
+# Setup neovim for root user
+- name: Setup neovim for root user
+  become: yes
+  block:
+    - name: Create neovim config
+      file:
+        path: "{{ neovim_config_dir }}"
+        mode: "+x"
+        state: directory
+
+
+    - name: Overide config vimrc file
+      template:
+        src: "vimrc.j2"
+        dest: "{{ vimrc_path }}"
+
+
+    - name: Create symlink for vim config
+      file:
+        src: "{{ vimrc_path }}"
+        dest: "{{ neovim_config_dir }}/init.vim"
+        state: link
+
+
+    - name: Create vim-plug folder
+      file:
+        path: "{{ vim_plug_dir }}"
+        state: directory
+        mode: o+rw 
+        recurse: yes
+
+
+    - name: Install vim-plug
+      get_url:
+        url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        dest: "{{ vim_plug_dir }}/plug.vim"
+        force: yes
+
+
+    - name: Install vim plugins
+      shell: 'nvim "+silent! PlugInstall!" +qall!'
+  when: is_setup_for_root|bool == True
+

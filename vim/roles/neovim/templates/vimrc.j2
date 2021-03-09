@@ -14,8 +14,10 @@
 "
 "''''''''''''''''''''''''''''''
 
+{% if enable_line_num %}
 " Show line number 
 set nu
+{% endif %}
 
 set encoding=UTF-8
 
@@ -28,24 +30,28 @@ set cmdheight=2
 
 set autoread
 set autowrite
-
 set autoindent
 set si "smart indent
 
 " show existing tab with 2 spaces width
-set tabstop=2
+set tabstop={{ shift_space }}
+
 " when indenting with '>', use 2 spaces width
-set shiftwidth=2
+set shiftwidth={{ shift_space }}
+
 " Fine tunes the amount of white space to be added
-set softtabstop=2
-" On pressing tab, insert 4 spaces
+set softtabstop={{ shift_space }}
+
+" On pressing tab
 set expandtab
 
 syntax on
 
+{% if enable_mouse %}
 if has('mouse')
   set mouse=a
 endif
+{% endif %}
 
 filetype plugin on
 
@@ -58,11 +64,13 @@ map <C-Right> :tabnext<CR>
 
 map <C-k> :TagbarToggle<CR>
 
+" Resize window
+map <Leader>sv :vertical resize 
+map <Leader>s :resize 
+
 " Open Terminal
 map <Leader>at :call FloatTerm()<CR>
 
-map <Leader>sv :vertical resize 
-map <Leader>s :resize 
 
 "''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
@@ -309,8 +317,6 @@ let g:tagbar_autofocus = 1
 
 " Whether line numbers should be shown in the Tagbar window.
 let g:tagbar_show_linenumbers = 1
-
-
 
 
 " Vim auto complete
