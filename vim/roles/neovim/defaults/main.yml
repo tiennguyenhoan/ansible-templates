@@ -1,5 +1,37 @@
 ---
-vi_config_dir: "~/.vim"
+vim_plug_dir: "~/.local/share/nvim/site/autoload"
 vimrc_path: "~/.vimrc"
 
 neovim_config_dir: "~/.config/nvim"
+
+is_setup_for_root: True
+
+enable_line_num: True
+enable_mouse: True
+
+shift_space: 2
+
+
+enable_floating_terminal: True
+
+enable_vim_icon_plugin: True
+
+enable_toc_bar_plugin: True
+
+enable_find_files_plugin: True
+
+enable_status_bar_plugin: True
+
+enable_code_comment_plugin: True
+
+enable_tag_bar_plugin: True
+
+enable_fold_code_plugin: True
+
+enable_auto_completion_plugin: True
+auto_complete_extensions_path: "~/.config/coc/extensions"
+
+enable_auto_pair_bracket_plugin: True
+
+enable_easy_align_plugin: True
+

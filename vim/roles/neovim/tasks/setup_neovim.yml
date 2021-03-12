@@ -1,0 +1,37 @@
+---
+# Setup neovim for current user
+- name: Create neovim config
+  file:
+    path: "{{ neovim_config_dir }}"
+    mode: "+x"
+    state: directory
+
+
+- name: Overide config vimrc file
+  template:
+    src: "vimrc.j2"
+    dest: "{{ vimrc_path }}"
+
+
+- name: Create symlink for vim config
+  file:
+    src: "{{ vimrc_path }}"
+    dest: "{{ neovim_config_dir }}/init.vim"
+    state: link
+
+
+- name: Create vim-plug folder
+  file:
+    path: "{{ vim_plug_dir }}"
+    state: directory
+    mode: o+rw
+    recurse: yes
+
+
+- name: Install vim-plug
+  get_url:
+    url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    dest: "{{ vim_plug_dir }}/plug.vim"
+    force: yes
+
+

@@ -1,0 +1,14 @@
+" Tagbar plugin
+"   Usage: Crtl + k
+"
+" ''''''''''''''''''''''''''''''''''''''''
+Plug 'preservim/tagbar'
+
+" If you set this option the cursor will move to the Tagbar window when it is opened.
+let g:tagbar_autofocus = 1
+
+" Whether line numbers should be shown in the Tagbar window.
+let g:tagbar_show_linenumbers = 1
+
+map <C-k> :TagbarToggle<CR>
+

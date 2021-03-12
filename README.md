@@ -5,7 +5,5 @@
 - java
 - vim
 - zsh
+- node
 
-TODO
-- nginx
-- permission (edit)
