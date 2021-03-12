@@ -1,0 +1,74 @@
+" Left Toc bar
+"
+"''''''''''''''''''''''''''''''''''''''
+Plug 'preservim/nerdtree'
+let NERDTreeMinimalUI=1
+let NERDTreeWinSize=35
+let NERDTreeShowHidden=1
+let NERDTreeIgnore = ['\.git$', '\.DS_Store$']
+
+" Auto open nerdtree
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
+
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+let g:NERDTreeFileExtensionHighlightFullName = 1
+let g:NERDTreeExactMatchHighlightFullName = 1
+let g:NERDTreePatternMatchHighlightFullName = 1
+let g:WebDevIconsDisableDefaultFolderSymbolColorFromNERDTreeDir = 1
+let g:WebDevIconsDisableDefaultFileSymbolColorFromNERDTreeFile = 1
+
+let g:NERDTreeHighlightFolders = 1 " enables folder icon highlighting using exact match
+let g:NERDTreeHighlightFoldersFullName = 1 " highlights the folder name
+
+" you can add these colors to your .vimrc to help customizing
+let s:brown = "b84f18"
+let s:aqua =  "3AFFDB"
+let s:blue = "689FB6"
+let s:darkBlue = "44788E"
+let s:purple = "834F79"
+let s:lightPurple = "834F79"
+let s:red = "F03737"
+let s:beige = "F5C06F"
+let s:yellow = "F09F17"
+let s:orange = "D4843E"
+let s:darkOrange = "F16529"
+let s:pink = "CB6F6F"
+let s:salmon = "EE6E73"
+let s:green = "8FAA54"
+let s:lightGreen = "b3ffbd"
+let s:zip_red = "e35d5d"
+let s:green = "31B53E"
+let s:white = "FFFFFF"
+let s:git_orange = "F54D27"
+let s:git_dark_gray = "616161"
+let s:darkBrown = "593333"
+
+let g:NERDTreeExtensionHighlightColor = {} " this line is needed to avoid error
+let g:NERDTreeExtensionHighlightColor['yml'] = s:brown
+
+let g:NERDTreePatternMatchHighlightColor = {} " this line is needed to avoid error
+let g:NERDTreePatternMatchHighlightColor['.*\.zip$'] = s:zip_red
+let g:NERDTreePatternMatchHighlightColor['.*\.gradle$'] = s:darkBlue 
+let g:NERDTreePatternMatchHighlightColor['.*\.j2$'] = s:lightGreen
+let g:NERDTreePatternMatchHighlightColor['.*\.sh$'] = s:salmon
+let g:NERDTreePatternMatchHighlightColor['.*\.bk$'] = s:darkBrown
+
+let g:NERDTreeExactMatchHighlightColor = {} " this line is needed to avoid error
+let g:NERDTreeExactMatchHighlightColor['dockerfile'] = s:blue
+let g:NERDTreeExactMatchHighlightColor['.gitignore'] = s:git_dark_gray
+
+
+" Enable When getting lag
+" let g:NERDTreeLimitedSyntax = 1
+"
+" If still lagging, trying to enable these 
+" let g:NERDTreeSyntaxDisableDef" aultExtensions = 1
+" let g:NERDTreeSyntaxDisableDefaultExactMatches = 1
+" let g:NERDTreeSyntaxDisableDefaultPatternMatches = 1
+" let g:NERDTreeSyntaxEnabledExtensions = ['c', 'h', 'c++', 'cpp', 'php', 'rb', 'js', 'css', 'html'] " enabled extensions with default colors
+" let g:NERDTreeSyntaxEnabledExactMatches = ['node_modules', 'favicon.ico'] " enabled exact matches with default colors
+
+map <C-n> :NERDTreeToggle<CR>
+

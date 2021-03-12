@@ -1,0 +1,8 @@
+" Fold code
+"  Usage:
+"    - zc : Collase 
+"    - zo : Expand
+"
+"''''''''''''''''''''''''''''''''''''''
+Plug 'tmhedberg/SimpylFold'
+

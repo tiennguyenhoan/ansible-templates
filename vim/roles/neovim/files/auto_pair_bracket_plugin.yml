@@ -1,0 +1,6 @@
+" Auto pair Bracket
+"
+"'''''''''''''''''''''''''''''''''''''''''''''
+
+Plug 'jiangmiao/auto-pairs'
+

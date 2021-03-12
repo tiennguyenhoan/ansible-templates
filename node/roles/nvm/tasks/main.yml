@@ -1,0 +1,9 @@
+---
+- name: Install curl 
+  become: yes
+  apt:
+    name: curl 
+    state: latest
+    update_cache: yes
+
+- include: nvm_install.yml
