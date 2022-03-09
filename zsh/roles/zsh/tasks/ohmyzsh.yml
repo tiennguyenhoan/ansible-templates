@@ -29,6 +29,7 @@
 
 
 - name: Set zsh as default shell
+  become: yes
   user:
     name: "{{ ansible_user }}" 
     shell: /usr/bin/zsh

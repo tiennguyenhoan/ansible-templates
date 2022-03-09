@@ -2,6 +2,7 @@
 "   Usage: Crtl + k
 "
 " ''''''''''''''''''''''''''''''''''''''''
+
 Plug 'preservim/tagbar'
 
 " If you set this option the cursor will move to the Tagbar window when it is opened.

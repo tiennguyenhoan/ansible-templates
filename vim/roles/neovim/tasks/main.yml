@@ -1,7 +1,6 @@
 ---
 
 - include: initial.yml
-  become: yes
 
 - include: setup_neovim.yml
 

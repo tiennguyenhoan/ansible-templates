@@ -34,3 +34,4 @@ WORKDIR /home/ubuntu
 EXPOSE 22
 
 ENTRYPOINT ["sh", "/docker-entrypoint.sh"]
+CMD ["tail", "-f", "/dev/null"]

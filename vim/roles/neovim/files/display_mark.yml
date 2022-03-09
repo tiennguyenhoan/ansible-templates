@@ -1,0 +1,9 @@
+" Vim Display mark
+"   Usage:
+"      mx           Toggle mark 'x' and display it in the leftmost column
+"      dmx          Remove mark 'x' where x is a-zA-Z
+"      m<BS>        Remove all markers
+"      m<Space>     Delete all marks from the current buffer
+"'''''''''''''''''''''''''''''''''''''''''''''
+
+Plug 'kshenoy/vim-signature'

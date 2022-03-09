@@ -1,4 +1,71 @@
 ---
+- name: Prepare install auto complete plugin
+  block:
+    - name: Check if node is installed
+      shell: 'source ~/.bashrc && node -v'
+      args:
+        executable: /bin/bash
+      register: node_result
+  rescue:
+    - name: Check nvm installed
+      stat:
+        path: '~/.nvm/versions/node'
+      register: nvm_result
+
+    - name: Print Error message
+      debug:
+        msg: "Failed - Node or Nvm is not installed\nSkip installed step of auto complete plugin"
+      when: not nvm_result.stat.exists
+
+  when: enable_auto_completion_plugin|bool == True
+
+- name: Install auto complete plugin
+  block:
+    - name: Add auto complete plugin
+      lineinfile:
+        path: "{{ vimrc_path }}"
+        line: "\n\n{{ item }}"
+        insertafter: 'call plug#begin.*'
+      with_file:
+        - "files/coc_nvim_plugin.yml"
+
+    - name: Install vim plugins
+      shell: 'nvim "+silent! PlugInstall!" +qall!'
+
+    - name: Create coc extensions
+      file:
+        path: "{{ auto_complete_extensions_path }}"
+        state: directory
+
+    - name: Create package.json for coc extensions
+      copy:
+        dest: "{{ auto_complete_extensions_path }}/package.json"
+        content: '{"dependencies":{}}'
+
+    - name: Install coc extensions
+      shell: 'npm install \
+          coc-snippets \
+          coc-tsserver \
+          coc-html \
+          coc-css \
+          coc-json \
+          coc-yaml \
+          coc-explorer \
+          coc-diagnostic \
+          coc-go \
+          coc-highlight \
+          coc-just-complete \
+          coc-markdownlint \
+          coc-pyright \
+          coc-sh \
+          neovim \
+          --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod'
+      args:
+        chdir: "{{ auto_complete_extensions_path }}"
+
+  when: enable_auto_completion_plugin|bool == True and (node_result is success or nvm_result.stat.exists)
+
+
 - name: Add vim icon plugin
   lineinfile:
     path: "{{ vimrc_path }}"
@@ -84,9 +151,19 @@
     - name: Install ctag for the plugin
       become: yes
       apt:
-        name: ctags 
+        name: ctags
         state: latest
         update_cache: yes
+      when:
+        - not homebrew_check.stat.exists
+
+    - name: Install ctag for the plugin with Homebrew
+      homebrew:
+        name: ctags 
+        state: latest
+        update_homebrew: yes
+      when:
+        - homebrew_check.stat.exists
 
     - name: Add tag bar plugin
       lineinfile:
@@ -98,68 +175,45 @@
   when: enable_tag_bar_plugin|bool == True
 
 
+- name: Add intent line Display plugin
+  lineinfile:
+    path: "{{ vimrc_path }}"
+    line: "\n\n{{ item }}"
+    insertafter: 'call plug#begin.*'
+  with_file:
+    - "files/intent_line_display.yml"
+  when: enable_intent_line_display_plugin|bool == True
+
+
+- name: Add Markdown toc plugin
+  lineinfile:
+    path: "{{ vimrc_path }}"
+    line: "\n\n{{ item }}"
+    insertafter: 'call plug#begin.*'
+  with_file:
+    - "files/markdown_toc.yml"
+  when: enable_markdown_toc_plugin|bool == True
+
+
+- name: Add markdown review plugin
+  lineinfile:
+    path: "{{ vimrc_path }}"
+    line: "\n\n{{ item }}"
+    insertafter: 'call plug#begin.*'
+  with_file:
+    - "files/markdown_review.yml"
+  when: enable_markdown_review_plugin|bool == true
+
+
+- name: Add Display mark plugin
+  lineinfile:
+    path: "{{ vimrc_path }}"
+    line: "\n\n{{ item }}"
+    insertafter: 'call plug#begin.*'
+  with_file:
+    - "files/display_mark.yml"
+  when: enable_display_mark_plugin|bool == true
+
+
 - name: Install vim plugins
   shell: 'nvim "+silent! PlugInstall!" +qall!'
-
-
-- name: Prepare install auto complete plugin
-  block:
-    - name: Check if node is installed
-      command: node -v
-      register: node_result
-      ignore_errors: True
-
-    - name: Print Error message 
-      debug:
-        msg: "Failed - Node is not installed\nSkip installed step for auto complete plugin"
-      when: node_result is failed
-
-  when: enable_auto_completion_plugin|bool == True
-
-
-- name: Install auto complete plugin
-  block:
-    - name: Add auto complete plugin
-      lineinfile:
-        path: "{{ vimrc_path }}"
-        line: "\n\n{{ item }}"
-        insertafter: 'call plug#begin.*'
-      with_file:
-        - "files/coc_nvim_plugin.yml"
-
-    - name: Install vim plugins
-      shell: 'nvim "+silent! PlugInstall!" +qall!'
-
-    - name: Create coc extensions
-      file:
-        path: "{{ auto_complete_extensions_path }}"
-        state: directory
-
-    - name: Create package.json for coc extensions
-      copy:
-        dest: "{{ auto_complete_extensions_path }}/package.json"
-        content: '{"dependencies":{}}'
-
-    - name: Install coc extensions
-      shell: 'npm install \
-          coc-snippets \
-          coc-tsserver \
-          coc-html \
-          coc-css \
-          coc-json \
-          coc-yaml \
-          coc-explorer \
-          coc-diagnostic \
-          coc-go \
-          coc-highlight \
-          coc-just-complete \
-          coc-markdownlint \
-          coc-pyright \
-          coc-sh \
-          --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod'
-      args:
-        chdir: "{{ auto_complete_extensions_path }}"
-
-  when: enable_auto_completion_plugin|bool == True and node_result is success
-
-

@@ -1,17 +1,44 @@
 ---
+- name: Ensuring Homebrew Is Installed
+  stat:
+    path: /opt/homebrew/bin/brew
+  register: homebrew_check
+
+
+- name: Remove old Zsh with Homebrew
+  homebrew:
+    name: zsh
+    state: absent
+    update_homebrew: yes
+  when:
+    - homebrew_check.stat.exists
+
 - name: Remove old Zsh
   apt:
     name: zsh
     state: absent
+  when:
+    - not homebrew_check.stat.exists
 
 - name: Remove zshrc file
   file: 
     path: "{{ zshrc_path }}"
     state: absent
 
+- name: Install zsh with homebrew
+  become: no
+  homebrew:
+    name: zsh
+    state: latest
+    update_homebrew: yes
+  when:
+    - homebrew_check.stat.exists
+
 - name: Install zsh
   apt:
     name: zsh
     state: latest
     update_cache: yes
+  when:
+    - not homebrew_check.stat.exists
 

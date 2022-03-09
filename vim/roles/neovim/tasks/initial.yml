@@ -1,26 +1,94 @@
 ---
-- name: Remove old neovim & vim packages
-  apt:
-    name:
-      - vim
-    state: absent
+- name: Check if Homebrew Is Installed
+  stat:
+    path: /opt/homebrew/bin/brew
+  register: homebrew_check
 
-- name: Install necessary tools
-  apt:
-    name:
-      - software-properties-common
-    state: latest
-    update_cache: yes
+- name: Install neovim with Homebrew
+  block:
+    - name: Remove old vim/neovim packages for install with homebrew
+      homebrew:
+        name:
+          - vim
+          - neovim
+        state: absent
+
+    - name: Install neovim packages with homebrew
+      homebrew:
+        name: 'neovim'
+        state: latest
+        update_homebrew: yes
+
+  when: homebrew_check.stat.exists
+
+- name: Install neovim with APT
+  become: yes
+  block:
+    - name: Remove old vim/neovim packages
+      apt:
+        name:
+          - vim
+          - neovim
+        state: absent
+
+    - name: Install necessary tools
+      apt:
+        name:
+          - software-properties-common
+        state: latest
+        update_cache: yes
+
+    - name: Add neovim repository
+      apt_repository:
+        repo: ppa:neovim-ppa/stable
+
+    - name: Install neovim packages
+      apt:
+        name: 'neovim'
+        state: latest
+        update_cache: yes
+
+  when: not homebrew_check.stat.exists
 
 
-- name: Add neovim repository
-  apt_repository:
-    repo: ppa:neovim-ppa/stable
+- name: Check if python 2 exist
+  command: python2 --version
+  register: python2_result
+  ignore_errors: True
+
+- name: Config for Python 2 provider
+  block:
+    - name: Install pip for Python 2 provider
+      become: yes
+      apt:
+        name:
+          - python-pip
+        state: present
+        update_cache: yes
+
+    - name: Install pynvim
+      shell: 'python2 -m pip install --user --upgrade pynvim'
+
+  when: python2_result is success
 
 
-- name: Install neovim packages
-  apt:
-    name: 'neovim'
-    state: latest
-    update_cache: yes
+- name: Check if python 3 exist
+  command: python3 --version
+  register: python3_result
+  ignore_errors: True
+
+- name: Config for Python 3 provider
+  block:
+    - name: Install pip for Python 3 provider
+      become: yes
+      apt:
+        name:
+          - python3-pip
+        state: present
+        update_cache: yes
+
+    - name: Install pynvim
+      shell: 'python3 -m pip install --user --upgrade pynvim'
+
+  when: python3_result is success
 

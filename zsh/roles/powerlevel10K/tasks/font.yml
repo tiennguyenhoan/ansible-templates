@@ -1,9 +1,25 @@
 ---
+- name: Ensuring Homebrew Is Installed
+  stat:
+    path: /opt/homebrew/bin/brew
+  register: homebrew_check
+
+- name: Install fontConfig with Homebrew
+  homebrew:
+    name: fontconfig
+    state: present
+    update_homebrew: yes
+  when:
+    - homebrew_check.stat.exists
+
+
 - name: Install fontConfig
   apt:
     name: fontconfig
     state: present
     update_cache: yes
+  when:
+    - not homebrew_check.stat.exists
 
 - name: Create font folder
   file:
@@ -17,7 +33,6 @@
     dest: "~/.local/share/fonts/"
   with_fileglob:
     - "files/*.ttf"
-
 
 - name: Clear and regenereate font cache
   command: fc-cache -f -v

@@ -2,7 +2,7 @@
 - name: Install nvm 
   hosts: "{{ hosts | default('local') }}"
   vars:
-    default_node_version: "10.15.0"
+    default_node_version: "15.2.1"
     nvm_version: "0.35.3"
   roles:
     - roles/nvm
