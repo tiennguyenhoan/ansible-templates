@@ -26,31 +26,27 @@
   shell: >
     curl -o- https://raw.githubusercontent.com/creationix/nvm/v{{ nvm_version }}/install.sh | bash
   args:
-    executable: /bin/bash
     creates: "~/.nvm/nvm.sh"
+    chdir: "$HOME"
 
 
-- name: Add NVM to nvm_profile
-  blockinfile:
-    block: |
-      export NVM_DIR="$HOME/.nvm"
-      [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
-      [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-    marker_begin: "Load installed nvm - START"
-    marker_end: "Load installed nvm - END"
+- name: Get default shell
+  shell: env |grep SHELL | cut -d '=' -f 2
+  register: sl
+
+- name: Setup .zshrc
+  lineinfile:
+    path: ~/.zshrc
+    line: source ~/.nvm/nvm.sh # This will make sure Node is on the user's PATH
     create: yes
-    mode: 0644
-    path: "~/.bashrc"
-    state: present
+  when: "{{ 'zsh' in sl.stdout }}"
 
-
-- name: Reload terminal environment
-  shell: 'eval "$(exec /usr/bin/env -i "${SHELL}" -l -c "export")"'
-  args:
-    executable: /bin/bash
+- name: source bashrc file
+  shell: source ~/.zshrc
+  when: "{{ 'zsh' in sl.stdout }}"
 
 - name: Install default node
   shell: "nvm install {{ default_node_version }}"
   args:
-    executable: /bin/bash
+    executable: "{{ sl.stdout }}"
 

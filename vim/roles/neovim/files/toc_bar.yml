@@ -1,7 +1,6 @@
 " Left Toc bar
 "
 "''''''''''''''''''''''''''''''''''''''
-
 Plug 'preservim/nerdtree'
 let NERDTreeMinimalUI=1
 let NERDTreeWinSize=35
@@ -48,7 +47,7 @@ let s:darkBrown = "593333"
 
 let g:NERDTreeExtensionHighlightColor = {} " this line is needed to avoid error
 let g:NERDTreeExtensionHighlightColor['yml'] = s:brown
-let g:nerdtreeextensionhighlightcolor['yaml'] = s:brown
+let g:NERDTreeExtensionHighlightColor['yaml'] = s:brown
 
 let g:NERDTreePatternMatchHighlightColor = {} " this line is needed to avoid error
 let g:NERDTreePatternMatchHighlightColor['.*\.zip$'] = s:zip_red
@@ -60,6 +59,7 @@ let g:NERDTreePatternMatchHighlightColor['.*\.bk$'] = s:darkBrown
 let g:NERDTreeExactMatchHighlightColor = {} " this line is needed to avoid error
 let g:NERDTreeExactMatchHighlightColor['dockerfile'] = s:blue
 let g:NERDTreeExactMatchHighlightColor['.gitignore'] = s:git_dark_gray
+let g:NERDTreeExactMatchHighlightColor['.dockerignore'] = s:git_dark_gray
 
 
 " Enable When getting lag
@@ -73,4 +73,3 @@ let g:NERDTreeExactMatchHighlightColor['.gitignore'] = s:git_dark_gray
 " let g:NERDTreeSyntaxEnabledExactMatches = ['node_modules', 'favicon.ico'] " enabled exact matches with default colors
 
 map <C-n> :NERDTreeToggle<CR>
-

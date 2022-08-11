@@ -18,6 +18,7 @@
     name: fontconfig
     state: present
     update_cache: yes
+  become: yes
   when:
     - not homebrew_check.stat.exists
 
