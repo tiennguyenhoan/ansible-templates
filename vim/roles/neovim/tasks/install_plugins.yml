@@ -66,16 +66,6 @@
   when: enable_auto_completion_plugin|bool == True and (node_result is success or nvm_result.stat.exists)
 
 
-- name: Add vim icon plugin
-  lineinfile:
-    path: "{{ vimrc_path }}"
-    line: "\n\n{{ item }}"
-    insertafter: 'call plug#begin.*'
-  with_file:
-    - "files/vim_icon_plugin.yml"
-  when: enable_vim_icon_plugin|bool == True
-
-
 - name: Add find files plugin
   lineinfile:
     path: "{{ vimrc_path }}"

@@ -1,5 +1,6 @@
 " Easy Align 
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
+"     usage: ga
 "
 "''''''''''''''''''''''''''''''''''''''
 

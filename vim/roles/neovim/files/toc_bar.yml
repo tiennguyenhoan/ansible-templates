@@ -1,4 +1,5 @@
 " Left Toc bar
+"   Usage: Crtl + n
 "
 "''''''''''''''''''''''''''''''''''''''
 Plug 'preservim/nerdtree'
@@ -12,7 +13,15 @@ autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+map <C-n> :NERDTreeToggle<CR>
+
+Plug 'ryanoasis/vim-devicons'
+
+" Since current head project having issues then we have to use this guy work
+" around, will change back when this issue adressed https://github.com/tiagofumo/vim-nerdtree-syntax-highlight/issues/53
+Plug 'johnstef99/vim-nerdtree-syntax-highlight'
+" Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+
 let g:NERDTreeFileExtensionHighlightFullName = 1
 let g:NERDTreeExactMatchHighlightFullName = 1
 let g:NERDTreePatternMatchHighlightFullName = 1
@@ -51,7 +60,7 @@ let g:NERDTreeExtensionHighlightColor['yaml'] = s:brown
 
 let g:NERDTreePatternMatchHighlightColor = {} " this line is needed to avoid error
 let g:NERDTreePatternMatchHighlightColor['.*\.zip$'] = s:zip_red
-let g:NERDTreePatternMatchHighlightColor['.*\.gradle$'] = s:darkBlue 
+let g:NERDTreePatternMatchHighlightColor['.*\.gradle$'] = s:darkBlue
 let g:NERDTreePatternMatchHighlightColor['.*\.j2$'] = s:lightGreen
 let g:NERDTreePatternMatchHighlightColor['.*\.sh$'] = s:salmon
 let g:NERDTreePatternMatchHighlightColor['.*\.bk$'] = s:darkBrown
@@ -65,11 +74,11 @@ let g:NERDTreeExactMatchHighlightColor['.dockerignore'] = s:git_dark_gray
 " Enable When getting lag
 " let g:NERDTreeLimitedSyntax = 1
 "
-" If still lagging, trying to enable these 
+" If still lagging, trying to enable these
 " let g:NERDTreeSyntaxDisableDef" aultExtensions = 1
 " let g:NERDTreeSyntaxDisableDefaultExactMatches = 1
 " let g:NERDTreeSyntaxDisableDefaultPatternMatches = 1
 " let g:NERDTreeSyntaxEnabledExtensions = ['c', 'h', 'c++', 'cpp', 'php', 'rb', 'js', 'css', 'html'] " enabled extensions with default colors
 " let g:NERDTreeSyntaxEnabledExactMatches = ['node_modules', 'favicon.ico'] " enabled exact matches with default colors
 
-map <C-n> :NERDTreeToggle<CR>
+
